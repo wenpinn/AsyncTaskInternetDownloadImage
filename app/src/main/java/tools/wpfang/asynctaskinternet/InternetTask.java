@@ -3,6 +3,7 @@ package tools.wpfang.asynctaskinternet;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.Html;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -45,9 +46,11 @@ public class InternetTask extends AsyncTask<String,Void,String> {
             con.connect();
             fin=con.getInputStream();
             BufferedReader bfRead=new BufferedReader((new InputStreamReader(fin)));
-            String line="";
+            String line;
             while((line=bfRead.readLine())!=null)
             {
+             //   line=line.replaceAll("<","<b><");
+             //  line=line.replaceAll(">","></b>");
                 result_Txt+=line+"   \n";
             }
 
@@ -62,7 +65,8 @@ public class InternetTask extends AsyncTask<String,Void,String> {
 
     @Override
     protected void onPostExecute(String s) {
-        resultText.setText(s);
+        resultText.setText(Html.fromHtml(s));
+       // resultText.setText(s);
         pd.dismiss();
     }
 }

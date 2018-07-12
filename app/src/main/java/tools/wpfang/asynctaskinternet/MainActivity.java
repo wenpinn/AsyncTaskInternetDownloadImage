@@ -17,6 +17,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void doWebConnect(View view) {
         internetTask=new InternetTask(this,webResultText);
-        internetTask.execute("http://www.google.com");
+        internetTask.execute("http://140.138.146.85/publish.htm");
     }
 }
