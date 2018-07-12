@@ -4,7 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.Html;
+import android.util.Log;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -17,6 +21,7 @@ public class InternetTask extends AsyncTask<String,Void,String> {
     private TextView resultText;
     private ProgressDialog pd;
     private Context ctx=null;
+    String json_txt;
     public InternetTask(Context ct,TextView tv)
     {
         ctx=ct;
@@ -53,6 +58,22 @@ public class InternetTask extends AsyncTask<String,Void,String> {
              //  line=line.replaceAll(">","></b>");
                 result_Txt+=line+"   \n";
             }
+
+
+            JSONObject topObject=new JSONObject((result_Txt));
+            JSONObject secondObject=topObject.getJSONObject("result");
+            Log.i("testjson",topObject.toString());
+        //   JSONObject thirdObject=topObject.getJSONObject("result");
+            JSONArray infoArray=secondObject.getJSONArray("fields");
+
+            for(int i=0;i<infoArray.length();i++){
+                JSONObject obj=infoArray.getJSONObject(i);
+                String web=(String)obj.getString("id");
+                json_txt+=web+"\n";
+            }
+
+            result_Txt=json_txt+result_Txt;
+
 
             bfRead.close();
             fin.close();
