@@ -1,5 +1,7 @@
 package tools.wpfang.asynctaskinternet;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
@@ -11,11 +13,25 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class InternetTask extends AsyncTask<String,Void,String> {
-    TextView resultText;
-    public InternetTask(TextView tv)
+    private TextView resultText;
+    private ProgressDialog pd;
+    private Context ctx=null;
+    public InternetTask(Context ct,TextView tv)
     {
+        ctx=ct;
         resultText=tv;
     }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        pd=new ProgressDialog(ctx);
+        pd.setTitle("Download");
+        pd.setMessage("downloading");
+        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pd.show();
+    }
+
     @Override
     protected String doInBackground(String... strings) {
         String strUrl=strings[0];
@@ -27,7 +43,6 @@ public class InternetTask extends AsyncTask<String,Void,String> {
             con.setRequestMethod("GET");
             con.setConnectTimeout(20000);
             con.connect();
-
             fin=con.getInputStream();
             BufferedReader bfRead=new BufferedReader((new InputStreamReader(fin)));
             String line="";
@@ -48,5 +63,6 @@ public class InternetTask extends AsyncTask<String,Void,String> {
     @Override
     protected void onPostExecute(String s) {
         resultText.setText(s);
+        pd.dismiss();
     }
 }
